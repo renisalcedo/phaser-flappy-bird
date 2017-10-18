@@ -4,4 +4,7 @@
 
 1.  ``` npm i or yarn ```
 
-2. Open localhost:3000
+2. npm start or yarn start
+
+3. Open localhost:3000
+
