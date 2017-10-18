@@ -13,6 +13,7 @@ const GameState = {
 
   create: function() {
     const gravityVal = 500;
+    Game.physics.startSystem(Phaser.Physics.ARCADE);
     // Adds Responsiveness to the game
     // SHOW_ALL makes the game fit the screen but keeps aspect ratio
     this.scale.pageAlignHorizontally = true;
@@ -37,20 +38,23 @@ const GameState = {
 
     // Activates collision for ground
     this.ground.body.collideWorldBounds = true;
-    this.ground.checkCollision.up = false;
-    this.ground.checkCollision.down = false;
-    this.ground.body.immovable = true;
+
+    // Register the keys
+    this.spaceKey = Game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
   },
 
   update: function() {
     Game.physics.arcade.collide(this.bird, this.ground);
+
+    // Will make the bird fly
+    if(this.spaceKey.isDown) {
+      this.bird.body.velocity.y = -100;
+    }
   },
 
 
   // Adds Physics and Gravity to game
   startPhysics: function(el) {
-    // Starts the physics on game and sets value for gravity
-    Game.physics.startSystem(Phaser.Physics.ARCADE);
     // Enables physics on element on game
     Game.physics.enable(el, Phaser.Physics.ARCADE);
   }
