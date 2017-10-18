@@ -1,5 +1,6 @@
 // Initial setup for the game
 const Game = new Phaser.Game(840, 600, Phaser.AUTO);
+let worldScale = 3;
 
 const GameState = {
   // Loads the game assets before the game starts
@@ -13,6 +14,7 @@ const GameState = {
 
   create: function() {
     const gravityVal = 500;
+
     Game.physics.startSystem(Phaser.Physics.ARCADE);
     // Adds Responsiveness to the game
     // SHOW_ALL makes the game fit the screen but keeps aspect ratio
@@ -20,7 +22,7 @@ const GameState = {
     this.scale.pageAlignVertically = true;
 
     // Adds background to game
-    this.background = this.game.add.sprite(0, 0, 'background');
+    this.background = this.game.add.tileSprite(0, 0, 800, 600, 'background');
     this.background.scale.setTo(3, 1.4);
 
     // Adds ground below background to game
@@ -30,7 +32,7 @@ const GameState = {
     // The bird in the game
     this.bird = this.game.add.sprite(Game.height-400, Game.height/2, 'bird')
 
-    this.startPhysics([this.bird, this.ground]);
+    this.startPhysics([this.bird, this.ground, this.background]);
 
     // Activates collision and gravity for bird
     this.bird.body.collideWorldBounds = true;
@@ -50,6 +52,10 @@ const GameState = {
     if(this.spaceKey.isDown) {
       this.bird.body.velocity.y = -100;
     }
+
+    this.background.body.velocity.x = -100;
+
+    Game.world.wrap(this.bird, 0, true);
   },
 
 
@@ -57,7 +63,7 @@ const GameState = {
   startPhysics: function(el) {
     // Enables physics on element on game
     Game.physics.enable(el, Phaser.Physics.ARCADE);
-  }
+  },
 };
 
 
