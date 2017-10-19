@@ -1,6 +1,5 @@
 // Initial setup for the game
 const Game = new Phaser.Game(840, 600, Phaser.AUTO);
-let worldScale = 3;
 
 const GameState = {
   // Loads the game assets before the game starts
@@ -13,31 +12,17 @@ const GameState = {
   },
 
   create: function() {
-    const gravityVal = 500;
-
-    Game.physics.startSystem(Phaser.Physics.ARCADE);
     // Adds Responsiveness to the game
-    // SHOW_ALL makes the game fit the screen but keeps aspect ratio
-    this.scale.pageAlignHorizontally = true;
-    this.scale.pageAlignVertically = true;
+    this.startResponsive();
 
-    // Adds background to game
-    this.background = this.game.add.tileSprite(0, 0, 800, 600, 'background');
-    this.background.scale.setTo(3, 1.4);
+    // Has on sprites on the game
+    this.startSprites();
 
-    // Adds ground below background to game
-    this.ground = this.game.add.sprite(0, 500, 'ground');
-    this.ground.scale.setTo(3, 1);
-
-    // The bird in the game
-    this.bird = this.game.add.sprite(Game.height-400, Game.height/2, 'bird')
-
+    // Starts physics
     this.startPhysics([this.bird, this.ground, this.background]);
 
     // Activates collision and gravity for bird
     this.bird.body.collideWorldBounds = true;
-    this.bird.body.gravity.y = gravityVal;
-
     // Activates collision for ground
     this.ground.body.collideWorldBounds = true;
 
@@ -53,17 +38,46 @@ const GameState = {
       this.bird.body.velocity.y = -100;
     }
 
+    // Will keep the world moving to the left
     this.background.body.velocity.x = -100;
 
-    Game.world.wrap(this.bird, 0, true);
+    // Will send bird back when outside of bounds
+    // Game.world.wrap(this.bird, 0, true);
   },
 
 
   // Adds Physics and Gravity to game
-  startPhysics: function(el) {
+  startPhysics: function(el, addGravity) {
     // Enables physics on element on game
+    Game.physics.startSystem(Phaser.Physics.ARCADE);
+
+    // Enable physics on certain elements
     Game.physics.enable(el, Phaser.Physics.ARCADE);
+
+    // Add a value 500 gravity in the bird
+    const gravityVal = 500;
+    this.bird.body.gravity.y = gravityVal;
   },
+
+  // Adds responsiveness to the game
+  startResponsive: function() {
+   // SHOW_ALL makes the game fit the screen but keeps aspect ratio
+    this.scale.pageAlignHorizontally = true;
+    this.scale.pageAlignVertically = true;
+  },
+
+  startSprites: function() {
+    // Adds background to game
+    this.background = this.game.add.tileSprite(0, 0, 800, 600, 'background');
+    this.background.scale.setTo(3, 1.4);
+
+    // Adds ground below background to game
+    this.ground = this.game.add.sprite(0, 500, 'ground');
+    this.ground.scale.setTo(2.5, 1);
+
+    // The bird in the game
+    this.bird = this.game.add.sprite(Game.height-400, Game.height/2, 'bird')
+  }
 };
 
 
