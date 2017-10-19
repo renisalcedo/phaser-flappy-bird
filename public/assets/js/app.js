@@ -19,19 +19,21 @@ const GameState = {
     this.startSprites();
 
     // Starts physics
-    this.startPhysics([this.bird, this.ground, this.background]);
+    this.startPhysics([this.bird, this.ground]);
 
     // Activates collision and gravity for bird
     this.bird.body.collideWorldBounds = true;
     // Activates collision for ground
-    this.ground.body.collideWorldBounds = true;
+    // this.bird.body.collideWorldBounds = true;
 
     // Register the keys
     this.spaceKey = Game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
   },
 
   update: function() {
-    Game.physics.arcade.collide(this.bird, this.ground);
+    if(Game.physics.arcade.collide(this.bird, this.ground)) {
+      this.bird.destroy();
+    }
 
     // Will make the bird fly
     if(this.spaceKey.isDown) {
@@ -39,7 +41,7 @@ const GameState = {
     }
 
     // Will keep the world moving to the left
-    this.background.body.velocity.x = -100;
+    this.ground.body.velocity.x = -100;
 
     // Will send bird back when outside of bounds
     // Game.world.wrap(this.bird, 0, true);
@@ -68,11 +70,11 @@ const GameState = {
 
   startSprites: function() {
     // Adds background to game
-    this.background = this.game.add.tileSprite(0, 0, 800, 600, 'background');
+    this.background = this.game.add.sprite(0, 0, 'background');
     this.background.scale.setTo(3, 1.4);
 
     // Adds ground below background to game
-    this.ground = this.game.add.sprite(0, 500, 'ground');
+    this.ground = this.game.add.tileSprite(0, 500, 800, 0, 'ground');
     this.ground.scale.setTo(2.5, 1);
 
     // The bird in the game
