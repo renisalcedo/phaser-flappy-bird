@@ -23,8 +23,12 @@ const GameState = {
 
     // Activates collision and gravity for bird
     this.bird.body.collideWorldBounds = true;
+
     // Activates collision for ground
-    // this.bird.body.collideWorldBounds = true;
+    // this.ground.body.collideWorldBounds = true;
+
+    // Makes the ground immovable when collided
+    this.ground.body.immovable = true;
 
     // Register the keys
     this.spaceKey = Game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -41,7 +45,7 @@ const GameState = {
     }
 
     // Will keep the world moving to the left
-    this.ground.body.velocity.x = -100;
+    this.ground.body.velocity.x = -200;
 
     // Will send bird back when outside of bounds
     // Game.world.wrap(this.bird, 0, true);
@@ -69,12 +73,14 @@ const GameState = {
   },
 
   startSprites: function() {
+    const infiniteMap = 1000000000;
+
     // Adds background to game
     this.background = this.game.add.sprite(0, 0, 'background');
     this.background.scale.setTo(3, 1.4);
 
     // Adds ground below background to game
-    this.ground = this.game.add.tileSprite(0, 500, 800, 0, 'ground');
+    this.ground = this.game.add.tileSprite(0, 500, infiniteMap, 0, 'ground');
     this.ground.scale.setTo(2.5, 1);
 
     // The bird in the game
