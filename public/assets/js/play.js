@@ -6,6 +6,12 @@ const playState = {
     // Has on sprites on the game
     this.startSprites();
 
+    // Game Score
+    Game.score = 0;
+
+    // Display Score
+    Game.scoreLabel = Game.add.text(580, 65, `Score ${Game.score}`, {font: '50px Arial', fill: '#fff'});
+
     // Enables physics on game
     //Game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -36,6 +42,17 @@ const playState = {
 
     if(Game.physics.arcade.collide(this.bird, [this.tube1, this.tube2])) {
       this.gameOver();
+    }
+
+    if(this.tube1 && this.tube2) {
+      let distance = Math.floor(this.tube1.x);
+      let nearBird = 205;
+
+      // Updates score and text when bird crosses
+      if(distance === nearBird) {
+        Game.score += 1;
+        Game.scoreLabel.setText(`Score ${Game.score}`, {font: '50px Arial', fill: '#fff'});
+      }
     }
 
     // Will make the bird fly
