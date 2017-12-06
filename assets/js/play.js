@@ -1,16 +1,4 @@
-// Initial setup for the game
-const Game = new Phaser.Game(840, 600, Phaser.AUTO);
-
-const GameState = {
-  // Loads the game assets before the game starts
-  preload: function() {
-    this.load.image('bird', 'assets/images/bird.png');
-    this.load.image('background', 'assets/images/bg.png');
-    this.load.image('ground', 'assets/images/ground.png');
-    this.load.image('tube1', 'assets/images/tube1.png');
-    this.load.image('tube2', 'assets/images/tube2.png');
-  },
-
+const playState = {
   create: function() {
     // Adds Responsiveness to the game
     this.startResponsive();
@@ -19,7 +7,7 @@ const GameState = {
     this.startSprites();
 
     // Enables physics on game
-    Game.physics.startSystem(Phaser.Physics.ARCADE);
+    //Game.physics.startSystem(Phaser.Physics.ARCADE);
 
     // Starts physics on the objects
     this.startPhysics([this.bird, this.ground]);
@@ -43,11 +31,11 @@ const GameState = {
   update: function() {
     // Bird dies on collision with ground or tubes
     if(Game.physics.arcade.collide(this.bird, this.ground)) {
-      this.bird.destroy();
+      this.gameOver();
     }
 
     if(Game.physics.arcade.collide(this.bird, [this.tube1, this.tube2])) {
-      this.bird.destroy();
+      this.gameOver();
     }
 
     // Will make the bird fly
@@ -71,8 +59,8 @@ const GameState = {
   // Adds responsiveness to the game
   startResponsive: function() {
    // SHOW_ALL makes the game fit the screen but keeps aspect ratio
-    this.scale.pageAlignHorizontally = true;
-    this.scale.pageAlignVertically = true;
+    Game.scale.pageAlignHorizontally = true;
+    Game.scale.pageAlignVertically = true;
   },
 
   startSprites: function() {
@@ -120,8 +108,9 @@ const GameState = {
       tubes[i].body.velocity.x = -150;
       tubes[i].outOfBoundsKill = true;
     }
+  },
+
+  gameOver: function() {
+    Game.state.start('over');
   }
 };
-
-Game.state.add('GameState', GameState);
-Game.state.start('GameState');
