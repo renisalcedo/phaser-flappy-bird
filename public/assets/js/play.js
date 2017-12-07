@@ -46,8 +46,11 @@ const playState = {
 
     if(this.tube1 && this.tube2) {
       let distance = Math.floor(this.tube1.x);
-      let nearBird = 205;
+      let nearBird = 230;
 
+      if(distance >= 200 && distance <= 230) {
+        console.log(distance, Game.bird.x);
+      }
       // Updates score and text when bird crosses
       if(distance === nearBird) {
         Game.score += 1;
