@@ -5,6 +5,7 @@ const playState = {
 
     // Has on sprites on the game
     this.startSprites();
+    this.themeSong.play();
 
     // Game Score
     Game.score = 0;
@@ -44,17 +45,14 @@ const playState = {
       this.gameOver();
     }
 
-    // Ensures existence of tubes
     if(this.tube1 && this.tube2) {
       let distance = Math.floor(this.tube1.x);
       let nearBird = 230;
 
-      if(distance >= 200 && distance <= 230) {
-        console.log(distance, Game.bird.x);
-      }
       // Updates score and text when bird crosses
       if(distance === nearBird) {
         Game.score += 1;
+        this.pointSound.play()
         Game.scoreLabel.setText(`Score ${Game.score}`, {font: '50px Arial', fill: '#fff'});
       }
     }
@@ -86,6 +84,7 @@ const playState = {
 
   startSprites: function() {
     const infiniteMap = 1000000000;
+    this.addMusic();
 
     // Adds background to game
     this.background = this.game.add.sprite(0, 0, 'background');
@@ -99,7 +98,12 @@ const playState = {
     this.bird = this.game.add.sprite(Game.height-400, Game.height/2, 'bird');
 
     // Generate obstacles
-    this.game.time.events.repeat(Phaser.Timer.SECOND * 2, 50, this.addObstacles.bind(this));
+    this.game.time.events.repeat(Phaser.Timer.SECOND * 2, infiniteMap, this.addObstacles.bind(this));
+  },
+
+  addMusic: function() {
+    this.themeSong  = Game.add.audio('gameplay');
+    this.pointSound = Game.add.audio('point');
   },
 
   setImmovable: function(immovable) {
@@ -110,8 +114,8 @@ const playState = {
 
   addObstacles: function() {
     // Generate obstacles
-    this.tube1  = this.game.add.sprite(500, -240 + Math.random() * 200, 'tube1');
-    this.tube2  = this.game.add.sprite(500, 240 + Math.random() * 200, 'tube2');
+    this.tube1  = this.game.add.sprite(500, -200 + Math.random() * 90, 'tube1');
+    this.tube2  = this.game.add.sprite(500, 220 + Math.random() * 200, 'tube2');
 
     let tubes = [this.tube1, this.tube2];
 
@@ -126,12 +130,17 @@ const playState = {
   // Setter for the properties of the tube
   setTubesProps: function(tubes) {
     for(let i = 0; i < tubes.length; i++) {
-      tubes[i].body.velocity.x = -150;
+      tubes[i].body.velocity.x = -200;
       tubes[i].outOfBoundsKill = true;
+      tubes[i].body.checkCollision.up = true;
+      tubes[i].body.checkCollision.down = true;
     }
   },
 
   gameOver: function() {
+    this.pointSound.stop();
+    this.themeSong.stop();
+
     Game.state.start('over');
   }
 };
