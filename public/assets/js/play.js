@@ -5,6 +5,7 @@ const playState = {
 
     // Has on sprites on the game
     this.startSprites();
+    this.themeSong.play();
 
     // Game Score
     Game.score = 0;
@@ -51,6 +52,7 @@ const playState = {
       // Updates score and text when bird crosses
       if(distance === nearBird) {
         Game.score += 1;
+        this.pointSound.play()
         Game.scoreLabel.setText(`Score ${Game.score}`, {font: '50px Arial', fill: '#fff'});
       }
     }
@@ -82,6 +84,7 @@ const playState = {
 
   startSprites: function() {
     const infiniteMap = 1000000000;
+    this.addMusic();
 
     // Adds background to game
     this.background = this.game.add.sprite(0, 0, 'background');
@@ -96,6 +99,11 @@ const playState = {
 
     // Generate obstacles
     this.game.time.events.repeat(Phaser.Timer.SECOND * 2, infiniteMap, this.addObstacles.bind(this));
+  },
+
+  addMusic: function() {
+    this.themeSong  = Game.add.audio('gameplay');
+    this.pointSound = Game.add.audio('point');
   },
 
   setImmovable: function(immovable) {
@@ -130,6 +138,9 @@ const playState = {
   },
 
   gameOver: function() {
+    this.pointSound.stop();
+    this.themeSong.stop();
+
     Game.state.start('over');
   }
 };

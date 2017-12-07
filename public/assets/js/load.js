@@ -11,6 +11,9 @@ const loadState = {
     this.load.image('tube1', 'assets/images/tube1.png');
     this.load.image('tube2', 'assets/images/tube2.png');
     this.load.image('start', 'assets/images/start.png');
+    // Music from http://opengameart.org
+    this.load.audio('gameplay', 'assets/sound/gameplay.ogg');
+    this.load.audio('point', 'assets/sound/point.wav');
   },
 
   create: function() {
